@@ -1,17 +1,17 @@
 ﻿#personaje
-define z = Character("[name]", color="#8ca969") #zana
+define z = Character("[name]", color="#5a9e07") #zana
 image z default = im.Scale("zana.png", 1400, 1100)
 image z happy = im.Scale("zana happy.png", 1400, 1100)
 image z think = im.Scale("zana ganditoare.png", 1400, 1100)
 image z scared = im.Scale("zana scared.png", 1400, 1100)
-define s = Character("soarec", color="#805D49") #soarec
+define s = Character("Chiță", color="#a05500") #soarec
 image s happy = im.Scale("soarec happy.png", 1400, 1100)
 image s default = im.Scale("soarec.png", 1400, 1100)
 image s diss = im.Scale("soarec dissapointed.png", 1400, 1100)
-define f = Character("Rumi", color="#5454") #furnica
+define f = Character("Rumi", color="#700404ff") #furnica
 image f happy = im.Scale("broastedefault.png", 1400, 1100)
 image f sad = im.Scale("broastedefault.png", 1400, 1100)
-define b = Character("Familia Broscăneanu", color="#57882D") #broaste
+define b = Character("Familia Broscăneanu", color="#284f06") #broaste
 image b default = im.Scale("broastedefault.png", 1400, 1100)
 image b happy = im.Scale("broastehappy.png", 1400, 1100)
 image b diss = im.Scale("broastedissapointed.png", 1400, 1100)
@@ -145,7 +145,7 @@ label ajunge_pamant:
             show screen stats_screen()
             $ aura +=50
             # show screen stats_screen
-            "+100 AURA"
+            "+50 AURA"
             jump intro_soarec
 
         "Pe poteca ce iese din pădure":
