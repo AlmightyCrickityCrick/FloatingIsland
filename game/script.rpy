@@ -4,7 +4,7 @@ image z default = im.Scale("zana.png", 1400, 1100)
 image z happy = im.Scale("zana happy.png", 1400, 1100)
 image z think = im.Scale("zana ganditoare.png", 1400, 1100)
 image z scared = im.Scale("zana scared.png", 1400, 1100)
-define s = Character("Chiță", color="#805D49") #soarec
+define s = Character("soarec", color="#805D49") #soarec
 image s happy = im.Scale("soarec happy.png", 1400, 1100)
 image s default = im.Scale("soarec.png", 1400, 1100)
 image s diss = im.Scale("soarec dissapointed.png", 1400, 1100)
@@ -41,14 +41,6 @@ transform center:
     ypos 0.1
     xpos 0.15
 
-transform left:
-    ypos 0.1
-    xpos -0.1
-
-transform right:
-    ypos 0.1
-    xpos 0.4
-
 default finished_pieces = 0
 #python code
 init python:
@@ -80,10 +72,10 @@ init python:
             pass
 
 default page_pieces = 12
-default full_page_size = (1050,500) 
-default piece_coordinates = [(885,357), (1090,349), (1288,329), (1490,359), 
-                            (885,451), (1029,481), (1268,464), (1437,524), 
-                            (887,611), (1064,625), (1279,633), (1474,652)]
+default full_page_size = (1920, 1080) 
+default piece_coordinates = [(578,331), (769,331), (960,331), (1151,331), 
+                            (578,470), (769,470), (960,470), (1151,470), 
+                            (578,609), (769,609), (960,609), (1151,609)]
 default initial_piece_coordinates = []
 #aura bar
 screen stats_screen():
@@ -217,16 +209,16 @@ screen reassemble_puzzle:
     #image "poiana_pod"
     frame:
         background "chenar.png"
-        xysize full_page_size 
-        anchor(0.5,0.5)
-        pos(1300,515)
+        xysize full_page_size #poate aici de jucat
+        anchor(0,0)
+        pos(578,331)
 
     draggroup:
         for i in range(page_pieces):
             drag:
                 drag_name i
                 pos initial_piece_coordinates[i]
-                anchor(0.5,0.5)
+                anchor(0,0)
                 focus_mask True
                 drag_raise True
                 image "Pieces/piesa%s.png" % (i+1)
@@ -237,7 +229,7 @@ screen reassemble_puzzle:
                 droppable True
                 dropped piece_drop
                 pos piece_coordinates[i]
-                anchor(0.5,0.5)
+                anchor(0,0)
                 focus_mask True
                 image "Pieces/piesa%s.png" % (i+1) alpha 0.5
 
