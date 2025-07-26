@@ -55,10 +55,10 @@ init python:
         return
 
 default page_pieces = 12
-default full_page_size = (1050,500) 
-default piece_coordinates = [(885,357), (1090,349), (1288,329), (1490,359), 
-                            (885,451), (1029,481), (1268,464), (1437,524), 
-                            (887,611), (1064,625), (1279,633), (1474,652)]
+default full_page_size = (764,418) 
+default piece_coordinates = [(578,331), (769,331), (960,331), (1151,331), 
+                            (578,470), (769,470), (960,470), (1151,470), 
+                            (578,609), (769,609), (960,609), (1151,609)]
 default initial_piece_coordinates = []
 #aura bar
 screen stats_screen():
