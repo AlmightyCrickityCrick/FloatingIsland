@@ -40,6 +40,12 @@ image cristal = im.Scale("cristal.png", 1920, 1080)
 transform center:
     ypos 0.1
     xpos 0.15
+transform left:
+    ypos 0.1
+    xpos -0.1
+transform right:
+    ypos 0.1
+    xpos 0.5
 
 default finished_pieces = 0
 #python code
@@ -63,13 +69,6 @@ init python:
             if finished_pieces==page_pieces:
                 renpy.jump("reassemble_complete")
         return
-    def aura_ending(aura): #aici for fi toate endings
-        if aura >=200:
-            pass
-        elif aura <0:
-            pass
-        else:
-            pass
 
 default page_pieces = 12
 default full_page_size = (1920, 1080) 
@@ -233,13 +232,6 @@ screen reassemble_puzzle:
                 focus_mask True
                 image "Pieces/piesa%s.png" % (i+1) alpha 0.5
 
-# label pod_minigame:
-#     scene poiana_gol
-#     show screen stats_screen()
-#     $ setup_puzzle()
-#     call screen reassemble_puzzle
-
-#     return
 
 label sat_broaste:
     scene sat_broaste
@@ -372,4 +364,68 @@ label plecare_sat:
     show z think at center
     "Ai fost pusă pe gânduri de cele spuse de el, însă îți continui drumul."
 
+label tower:
+    scene tower
+    show z think at center
+    "Ai mers mai departe pana cand gandurile te-au coplesit."
+    z"Oare o să reușesc să ajut aceste biete ființe?..."
+    z"Poate nu voi fi în stare să mă descurc cu ele,cine știe poate chiar o să dau eșec în această misiune?"
+    show z scared at center
+    z"Nu mă gândesc la nimic rău,totul va fi bine"
+    "Dintr-o dată deveni întunecat fără niciun simț și doar șoapte se auzea prin mințile ei."
 
+    "O să dai greș…o să rămâi fără nimic…vei fi singură pe tot restul vieții..."#italic
+    "...nu vei putea să schimbi această lume plină de energie neagră,care am supus-o noi." #italic
+
+    "Șoaptele deveneau tot mai în ceață și fiecare milimetru al corpului tău își revenea,fiindcă nu te-ai dat bătută și nu ai ascultat nimic din ceea ce ți-au spus spiritele."
+    show z default at center
+    "Devii mai puternică și mergi mai departe spre drumul tău, știind că într-un final toți vor fi fericiți"
+
+    z"Totul va fi bine voi reuși pentru ca să-mi întorc casa ,să-mi întorc insula dar și speranța acestor ființe bune și înțelepte."
+    jump cristal
+
+label cristal:
+    scene cristal
+    show z think at left
+    z "E timpul să termin toată povestea asta."
+    "Te apropii de cristal și îi oferi aura adunată."
+    if aura >=200:
+        jump good_end
+    elif aura>=0 and aura<200:
+        jump mid_end
+    elif aura<0:
+        jump bad_end
+
+label good_end:
+    scene cristal
+    show z happy at center
+    "Aura ta a reușit să restabilească fericirea."
+    "Spiritele au fost trimise înapoi pe tărâmul lor."
+    scene island
+    "Iar tu ai revenit acasă."
+    jump sfarsit
+
+
+label bad_end:
+    scene cristal
+    show z scared at center
+    "Nu ai aura, ba chiar prezența ta e negativă."
+    "Ești copleșită de spiritele negative."
+    scene black
+    "La fel ca tot restul lumii."
+    jump sfarsit
+
+
+label mid_end:
+    scene cristal
+    show z think at center
+    "Te apropii de cristal, însă nu se intâmplă nimic."
+    "Prezența ta a nu a fost destul de pozitivă."
+    scene sat_broaste
+    show z default at left
+    show b default at right
+    "Nu te poți întoarce acasă, deci îți rămâne doar să te obișnuiești cu noua ta casă."
+    jump sfarsit
+
+label sfarsit:
+    "Sfârșit."
