@@ -9,6 +9,8 @@ image s happy = im.Scale("soarec happy.png", 1400, 1100)
 image s default = im.Scale("soarec.png", 1400, 1100)
 image s diss = im.Scale("soarec dissapointed.png", 1400, 1100)
 define f = Character("Rumi", color="#5454") #furnica
+image f happy = im.Scale("broastedefault.png", 1400, 1100)
+image f sad = im.Scale("broastedefault.png", 1400, 1100)
 define b = Character("Familia Broscăneanu", color="#57882D") #broaste
 image b default = im.Scale("broastedefault.png", 1400, 1100)
 image b happy = im.Scale("broastehappy.png", 1400, 1100)
@@ -25,10 +27,14 @@ image field_bridge = im.Scale("Field + bridge.png", 1920, 1080)
 image island_wind = im.Scale("island_wind.png", 1920, 1080)
 image poiana = im.Scale("poiana.png", 1920, 1080)
 image poiana_aura = im.Scale("poiana_aura.png", 1920, 1080)
-image poiana_pod = im.Scale("poiana_pod.png", 1920, 1080)
+image poiana_pod = im.Scale("poianapod.png", 1920, 1080)
 image poiana_gol = im.Scale("poianafpod.png", 1920, 1080)
 image black_image = im.Scale("black_image.png", 1920, 1080)
-#image puzzle_frame = im.Scale("puzzle_frame.png", 1920, 1080)
+image marginea_padurii = im.Scale("marginea_padurii.png", 1920, 1080)
+image sat_broaste = im.Scale("sat_broaste.png", 1920, 1080)
+image night = im.Scale("night.png", 1920, 1080)
+image tower = im.Scale("tower.png", 1920, 1080)
+image cristal = im.Scale("cristal.png", 1920, 1080)
 
 #pozitionari
 transform center:
@@ -65,6 +71,13 @@ init python:
             if finished_pieces==page_pieces:
                 renpy.jump("reassemble_complete")
         return
+    def aura_ending(aura): #aici for fi toate endings
+        if aura >=200:
+            pass
+        elif aura <0:
+            pass
+        else:
+            pass
 
 default page_pieces = 12
 default full_page_size = (1050,500) 
@@ -139,22 +152,66 @@ label ajunge_pamant:
             show z happy at center
             "Simți o energie pozitivă ce te pătrunde."
             show screen stats_screen()
-            $ aura +=100
+            $ aura +=50
             # show screen stats_screen
             "+100 AURA"
-            jump broaste_minigame
+            jump intro_soarec
 
         "Pe poteca ce iese din pădure":
             "Începi să mergi pe drumul ce trece prin pădure."
-            jump broaste_minigame
+            jump intro_soarec
             
 #Chapter 2: Exploreaza
 label intro_soarec:
-    #Vede prima data soarecul se ii povesteste despre cum lucreaza aura bar si ii
-    # da alte detalii
+    scene marginea_padurii
+    "Iti continui drumul prin poiana pana ajungi la marginea padurii, unde observi o silueta la tulpina unui copac"
+    show s default at right
+    "Bine ai ajuns in lumea fiintelor de jos...Te asteptam demul"
+    show z default at left
+    z "Cine suneti,un fel de ghid al acestei lumi?"
+    s "Sunt cel care iti va explica cum stau lucrurile aici si ce va trebui sa faci pe parcurs"
+    z "Atunci va ascult fiindca doresc sa aduc lumea la normal"
+    show screen stats_screen()
+    s "Va trebui sa te indrepti inainte pentru a strange AURA care iti va aduce puteri pebtru
+    a invinge spiritele negre care au aparut in urma dezechilibrarii emotiilor si plus la asta
+    s-au inceput furturile care organizeaza spiritele pentru a aduce si mai mult"
+    z "Am inteles, va multumesc pentru informatie, atunci voi pleca imediat in calatorie."
+    jump intalnire_furnica
 label intalnire_furnica:
-    #Vede furnica ce i se plange ca nu poate ajunge acasa ca podul e stricat.
-    # screen cu minigame
+    scene poiana_gol
+    "Ai pornit intr-o calatorie in care va trebui sa strangi AURA pentru a indeplini caseta
+    si de invinge spiritele negre"
+    "Dupa de ai strabatut padurea,ai ajuns la un pod rupt care trebuia sa fie reparat,langa el observi
+    o furnica care nu poate trece si cere ajutor de la tine fiindca te-a observat in vizorul sau"
+    show f default at right
+    "Buna draga zana!...ma ajuti te rog sa repar acest pod pentru a putea trece in sat,deoarece nu mai poate nimeni cine sa ma ajute"
+    show z default at left
+    "Dar ce s-a intamplat cu podul, s-a destramat?"
+    f "Au trecut pe aici spiritele negre si au distrus singura cale de a ajunge acasa si am nevoie de cineva sa ma ajute"
+    z "Desigur!...O sa va ajut cu cea mai mare placere"
+    hide f default
+    hide z default
+    $ setup_puzzle()
+    call screen reassemble_puzzle
+    return
+
+label reassemble_complete:
+    scene poiana_pod
+    show f happy at right
+    show z happy at left
+    "Ai reușit să repari podul către sat."
+    $ aura+=50
+    "+100 AURA"
+
+    "Acum furnica te va îndrepta spre sat unde s-au organizat cele mai mari pagube."
+    f "Acolo locuiesc broaște înțelepte care au tot feluri de ritualuri pentru fiecare năpastă,"
+    f "dacă observi ceva straniu să nu te uimești și să fii calmă."
+    f "Acolo vei ajuta cel mai mult."
+    hide f happy
+    hide z happy
+    "Împreună cu furnica ați plecat în drum către sat ,ținându-vă de vorbă ca să treacă timpul mai repede și să ajungeți cu o dispoziție bună."
+    jump sat_broaste
+
 
 screen reassemble_puzzle:
     #image "poiana_pod"
@@ -184,16 +241,37 @@ screen reassemble_puzzle:
                 focus_mask True
                 image "Pieces/piesa%s.png" % (i+1) alpha 0.5
 
-label pod_minigame:
-    scene poiana_gol
-    show screen stats_screen()
-    $ setup_puzzle()
-    call screen reassemble_puzzle
+# label pod_minigame:
+#     scene poiana_gol
+#     show screen stats_screen()
+#     $ setup_puzzle()
+#     call screen reassemble_puzzle
 
-    return
+#     return
 
-label reassemble_complete:
-    "ai completat puzzle"
+label sat_broaste:
+    scene sat_broaste
+    "Peste ceva timp ați ajuns la marginea satului,unde ați văzut în centrul său niște broaște care dansau în jurul unui rug mare care pâlpâia tot mai tare."
+    show z default at left
+    show f happy at right
+    f "Îți mulțumesc pentru ajutor, și ție îți doresc succes în continuare"
+    hide f happy
+    show z default at center
+
+    "Ai ajuns în centrul satului unde te-au observat broaștele."
+    show b default at right
+    show z default at left
+    "Cu suspiciune, încep să-ți vorbească:"
+
+    b"Dacă nu mă greșesc ești zâna care a venit de pe insula din ceruri, așai?"
+
+    z"Da, mă numesc [name] și am venit să rezolv problema cu spiritele negre,"
+    z"ca să readuc echilibrul în lume și să mă întorc pe insula mea."
+    b "Spiritele negre au distrus grădinile noastre, ne-au lăsat fără hrană, au distrus și case."
+    b"Vom fi încântați dacă vei rezolva această problemă în cel mai curând timp, "
+    b"însă avem câteva întrebări pentru tine mai întâi:"
+    jump broaste_minigame
+
 
 label broaste_minigame:
     show b default at right
@@ -233,15 +311,15 @@ label broaste_minigame:
         "Am fost afectată și eu de spiritele rele și vreau să restabilesc pacea.":
             show b happy
             "Broaștelor le place răspunsul tău."
-            $ aura +=50
+            $ aura +=100
             "+50 AURA"
         "Nu știu cum să vă demonstrez.":
             "Broaștele nu par convinse de răspunsul tău."
         "Cum îndrăzniți deodată să mă acuzați? doar nu v-am făcut nimic rău.":
             show b diss
             "Broaștele sunt nemulțumite cu răspunsul tău."
-            $ aura -=50
-            "-50 AURA"
+            $ aura -=100
+            "-100 AURA"
     show b default
     menu:
         b"Demonstrează că ești de partea noastră."
@@ -259,6 +337,47 @@ label broaste_minigame:
         "V-am spus deja tot, ar fi inteligent din partea voastră să mă credeți.":
             show b diss
             "Broaștele sunt nemulțumite cu răspunsul tău."
-            $ aura -=50
-            "-50 AURA"
+            $ aura -=200
+            "-200 AURA"
+label broaste_aftermath:
+    if aura > 100:
+        jump broaste_pozitiv
+    else:
+        jump broaste_mid
+
+ 
+label broaste_pozitiv:
+    "Ai obținut încrederea broscuțelor și AURA în același timp."
+    "Energia pozitivă pe care o emani sperie orice spirit negativ"
+    "Satul pare salvat."
+    show b happy at right
+    show z happy at left
+    b "Mulțumim pentru ajutor!"
+    b "Ești magică! Îți urăm succes în aventura ta."
+    jump plecare_sat
+
+label broaste_mid:
+    show z default at left
+    show b diss at right
+    "Broaștele nu au mare încredere în tine."
+    "Nu ai reușit să obții destulă AURA și satul lor continuă să fie bântuit."
+    jump plecare_sat
+
+label plecare_sat:
+    "A venit timpul să pleci din sat în căutarea spiritelor."
+    scene night
+    show z think at center
+    "Continui să mergi prin pădure, cînd te întâlnești din nou cu Chiță."
+    show z default at left
+    show s default at right
+    s "Bună! Să știi că următoarea ta oprire este esențială."
+    s "În pădure se află un turn cu un cristal."
+    s "El va determina soarta acestei lumi."
+    s "Și desigur, soarta ta."
+    s "Caută-l."
+    hide s default
+    "La fel de brusc cum apăruse, atât de brusc dispăruse."
+    show z think at center
+    "Ai fost pusă pe gânduri de cele spuse de el, însă îți continui drumul."
+
 
