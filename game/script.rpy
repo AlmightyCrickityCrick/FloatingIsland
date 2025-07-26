@@ -13,26 +13,69 @@ define b = Character("broaste", color="#57882D") #broaste
 default aura = 0
 default char_ypos=0.1
 
+
 #backgrounds
 image island = im.Scale("island.png", 1920, 1080)
 image field = im.Scale("Field.png", 1920, 1080)
 image field_bridge = im.Scale("Field + bridge.png", 1920, 1080)
 image island_wind = im.Scale("island_wind.png", 1920, 1080)
+image poiana = im.Scale("poiana.png", 1920, 1080)
 image poiana_aura = im.Scale("poiana_aura.png", 1920, 1080)
+image poiana_pod = im.Scale("poiana_pod.png", 1920, 1080)
+image poiana_gol = im.Scale("poianafpod.png", 1920, 1080)
 image black_image = im.Scale("black_image.png", 1920, 1080)
+#image puzzle_frame = im.Scale("puzzle_frame.png", 1920, 1080)
 
-#locatii
+#pozitionari
 transform center:
     ypos 0.1
     xpos 0.15
 
-# de adaugat undeva pe aici cod ce seteaza aura bar
-screen stats_screen():
-    frame:
-        xalign 0.05
-        yalign 0.0
-        vbox:
-            text "AURA: [aura]"
+default finished_pieces = 0
+#python code
+init python:
+    import random
+    def setup_puzzle():
+        for i in range(page_pieces):
+            start_x = 400 #1200
+            start_y = 200 #200
+            end_x = 1500 #1700
+            end_y = 800 #800
+            rand_loc = (renpy.random.randint(start_x, end_x), renpy.random.randint(start_y, end_y))
+            initial_piece_coordinates.append(rand_loc)
+
+    def piece_drop(dropped_on, dragged_piece):
+        global finished_pieces
+        if dragged_piece[0].drag_name == dropped_on.drag_name:
+            dragged_piece[0].snap(dropped_on.x, dropped_on.y)
+            dragged_piece[0].draggable = False    
+            finished_pieces+=1
+            if finished_pieces==page_pieces:
+                renpy.jump("reassemble_complete")
+        return
+
+default page_pieces = 12
+default full_page_size = (1050,500) 
+default piece_coordinates = [(781,357), (990,349), (1188,329), (1390,359), 
+                            (785,451), (929,481), (1168,464), (1337,524), 
+                            (787,611), (964,625), (1179,633), (1374,652)]
+default initial_piece_coordinates = []
+
+#pt minigame
+# define giu.name_xpos = 520
+# define gui.dialogue_xpos = 520
+#aura bar
+# screen stats_screen():
+#     frame:
+#         xalign 0.05
+#         yalign 0.01
+#         vbox:
+#             text "AURA: [aura]"
+#             text "current piece: [current_piece]"
+#             text "slot piece: [slot_piece]"
+#             text "finished piece: [finished_pieces]"
+#             text "Coord: [renpy.get_mouse_pos()]"
+
 
 #Chapter 1: Prolog
 label start:
@@ -72,33 +115,77 @@ label start:
     "Îți pierzi conștiința."
 
     jump ajunge_pamant
-
-    
     
    
 label ajunge_pamant:
-    # Freya este pe pamant si incepe putin sa exploreze zona.
-    # Este optiunea de a explora (o poiana) sa primeasca extra aura. ( cu call)
+    scene poiana
+    "Te trezești într-o poiană în care nu ai mai fost vreodată."
+    show z scared at center 
+    z "Unde sunt?...Cum am ajuns aici?..."
+    show z think
+    z "Trebuie să caut pe cineva să mă ajute."
+    "Te primbli prin poiană ca să explorezi lumea nouă."
+    "Încerci să-ți dai seama ce a putut cauza furtuna, dar nu găsești răspunsul."
+    "Începi, totuși, să simți că îți revin puterile."
+    menu:
+        "Unde dorești să mergi mai departe?"
+        "La poiana ascunsă din apropiere":
+            "Decizi să explorezi puțin locul din împrejurime."
+            scene poiana_aura
+            show z happy at center
+            "Simți o energie pozitivă ce te pătrunde."
+            $ aura +=100
+            # show screen stats_screen
+            "+100 AURA"
+            jump poiana_start
+
+        "Pe poteca ce iese din pădure":
+            "Începi să mergi pe drumul ce trece prin pădure."
+            jump pod_minigame
+            
 #Chapter 2: Exploreaza
-label poiana_start:
-    #poiana extra unde poate sa mearga
 label intro_soarec:
     #Vede prima data soarecul se ii povesteste despre cum lucreaza aura bar si ii
     # da alte detalii
 label intalnire_furnica:
     #Vede furnica ce i se plange ca nu poate ajunge acasa ca podul e stricat.
     # screen cu minigame
-screen pod_minigame:
-    # aici va fi codul pentru minigame
-    # primeste + aura daca reuseste in timp si - daca nup
-    pass
-label pod_succes:
-    #daca ajuta furnica va fi o interactie pozitiva
-    # inainte de a intra in sat soarecul arata ca e multumit
-label pod_esec:
-    #daca nu ajuta furnica ramane acolo trista, zana zboara peste rau mai departe
-    # soarecul arata dezamagirea
-label sat_soarec:
-    # inainte de a intra in sat soarecul ii da mai multe detalii despre el
 
+screen reassemble_puzzle:
+    #image "poiana_pod"
+    frame:
+        background "chenar.png"
+        xysize full_page_size #poate aici de jucat
+        anchor(0.5,0.5)
+        pos(960,540)
+
+    draggroup:
+        for i in range(page_pieces):
+            drag:
+                drag_name i
+                pos initial_piece_coordinates[i]
+                anchor(0.5,0.5)
+                focus_mask True
+                drag_raise True
+                image "Pieces/piesa%s.png" % (i+1)
+        for i in range(page_pieces):
+            drag:
+                drag_name i
+                draggable False
+                droppable True
+                dropped piece_drop
+                pos piece_coordinates[i]
+                anchor(0.5,0.5)
+                focus_mask True
+                image "Pieces/piesa%s.png" % (i+1) alpha 0.5
+
+label pod_minigame:
+    scene poiana_gol
+    $setup_puzzle()
+    call screen reassemble_puzzle
+
+    return
+
+label reassemble_complete:
+    "ai completat puzzle"
 
