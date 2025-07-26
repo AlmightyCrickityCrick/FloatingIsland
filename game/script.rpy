@@ -1,4 +1,12 @@
-﻿#personaje
+﻿#sounds
+define ambient = "music/medieval-ambient-236809.mp3"
+define vant = "music/680138__newlocknew__winddsgn_hurricane-wind-in-the-forest-areadesigned_em.mp3"
+define sorik = "music/266671__spiehler__squeak.mp3"
+define aura_music = "music/621784__everythingsounds__twinkle-chimes.mp3"
+define noapte = "music/817206__newlocknew__birdsong_a-cuckoo-in-the-morning-in-the-forestvery-closebirds.wav"
+define turn = "music/medieval-background-351307.mp3"
+
+#personaje
 define z = Character("[name]", color="#8ca969") #zana
 image z default = im.Scale("zana.png", 1400, 1100)
 image z happy = im.Scale("zana happy.png", 1400, 1100)
@@ -9,8 +17,8 @@ image s happy = im.Scale("soarec happy.png", 1400, 1100)
 image s default = im.Scale("soarec.png", 1400, 1100)
 image s diss = im.Scale("soarec dissapointed.png", 1400, 1100)
 define f = Character("Rumi", color="#5454") #furnica
-image f happy = im.Scale("broastedefault.png", 1400, 1100)
-image f sad = im.Scale("broastedefault.png", 1400, 1100)
+image f sad = im.Scale("Furnica (1).png", 1400, 1100)
+image f happy = im.Scale("Furnica (2).png", 1400, 1100)
 define b = Character("Familia Broscăneanu", color="#57882D") #broaste
 image b default = im.Scale("broastedefault.png", 1400, 1100)
 image b happy = im.Scale("broastehappy.png", 1400, 1100)
@@ -18,7 +26,6 @@ image b diss = im.Scale("broastedissapointed.png", 1400, 1100)
 
 default aura = 0
 default char_ypos=0.1
-
 
 #backgrounds
 image island = im.Scale("island.png", 1920, 1080)
@@ -87,6 +94,9 @@ screen stats_screen():
 
 #Chapter 1: Prolog
 label start:
+
+    play music ambient loop
+
     scene island
     "Pe o insulă îndepărtată, în ceruri, unde lumina este principala 
     sursă de energie în lume, emoția pozitivă se mărea pe zi ce trece."
@@ -103,6 +113,10 @@ label start:
     z "...dar, mi se pare ca vânturile de astăzi sunt neliniștite."
     show z scared
     z "Cred că se apropie o furtună puternică."
+
+    stop music fadeout 5.0
+ 
+    play sound vant
     
     "Vântul devine tot mai aspru pe secundă ce se apropie."
     
@@ -122,17 +136,23 @@ label start:
     z"Cine sunteți?...Ce doriți?..."
     "Îți pierzi conștiința."
 
+    stop sound fadeout 2
+ 
+
     jump ajunge_pamant
     
    
 label ajunge_pamant:
     scene poiana
+
+    play music ambient loop
+
     "Te trezești într-o poiană în care nu ai mai fost vreodată."
     show z scared at center 
     z "Unde sunt?...Cum am ajuns aici?..."
     show z think
     z "Trebuie să caut pe cineva să mă ajute."
-    "Te primbli prin poiană ca să explorezi lumea nouă."
+    "Te plimbli prin poiană ca să explorezi lumea nouă."
     "Încerci să-ți dai seama ce a putut cauza furtuna, dar nu găsești răspunsul."
     "Începi, totuși, să simți că îți revin puterile."
     menu:
@@ -143,8 +163,9 @@ label ajunge_pamant:
             show z happy at center
             "Simți o energie pozitivă ce te pătrunde."
             show screen stats_screen()
-            $ aura +=50
+            $ aura +=100
             # show screen stats_screen
+            play sound aura_music 
             "+100 AURA"
             jump intro_soarec
 
@@ -156,6 +177,8 @@ label ajunge_pamant:
 label intro_soarec:
     scene marginea_padurii
     "Iti continui drumul prin poiana pana ajungi la marginea padurii, unde observi o silueta la tulpina unui copac"
+
+    play music sorik loop
     show s default at right
     "Bine ai ajuns in lumea fiintelor de jos...Te asteptam demul"
     show z default at left
@@ -167,31 +190,38 @@ label intro_soarec:
     a invinge spiritele negre care au aparut in urma dezechilibrarii emotiilor si plus la asta
     s-au inceput furturile care organizeaza spiritele pentru a aduce si mai mult"
     z "Am inteles, va multumesc pentru informatie, atunci voi pleca imediat in calatorie."
+
+    stop music fadeout 1
+
     jump intalnire_furnica
 label intalnire_furnica:
+    play audio ambient volume 0.5 loop
+
     scene poiana_gol
     "Ai pornit intr-o calatorie in care va trebui sa strangi AURA pentru a indeplini caseta
     si de invinge spiritele negre"
     "Dupa de ai strabatut padurea,ai ajuns la un pod rupt care trebuia sa fie reparat,langa el observi
     o furnica care nu poate trece si cere ajutor de la tine fiindca te-a observat in vizorul sau"
-    show f default at right
+    show f sad at right
     "Buna draga zana!...ma ajuti te rog sa repar acest pod pentru a putea trece in sat,deoarece nu mai poate nimeni cine sa ma ajute"
     show z default at left
     "Dar ce s-a intamplat cu podul, s-a destramat?"
     f "Au trecut pe aici spiritele negre si au distrus singura cale de a ajunge acasa si am nevoie de cineva sa ma ajute"
     z "Desigur!...O sa va ajut cu cea mai mare placere"
-    hide f default
+    hide f happy
     hide z default
     $ setup_puzzle()
     call screen reassemble_puzzle
     return
+    # stop audio fadeout 1.5
 
 label reassemble_complete:
     scene poiana_pod
     show f happy at right
     show z happy at left
     "Ai reușit să repari podul către sat."
-    $ aura+=50
+    play sound aura_music
+    $ aura+=100
     "+100 AURA"
 
     "Acum furnica te va îndrepta spre sat unde s-au organizat cele mai mari pagube."
@@ -234,6 +264,7 @@ screen reassemble_puzzle:
 
 
 label sat_broaste:
+    play sound noapte
     scene sat_broaste
     "Peste ceva timp ați ajuns la marginea satului,unde ați văzut în centrul său niște broaște care dansau în jurul unui rug mare care pâlpâia tot mai tare."
     show z default at left
@@ -265,11 +296,13 @@ label broaste_minigame:
         "Mă numesc [name]. Am venit să vă ajut.":
             show b happy
             "Broaștelor le place răspunsul tău."
+            play sound aura_music
             $ aura +=50
             "+50 AURA"
         "Nu cred că e important pentru conversația noastră":
             show b diss
             "Broaștele sunt nemulțumite cu răspunsul tău."
+            play sound aura_music
             $ aura -=50
             "-50 AURA"
         "[name], o zână.":
@@ -282,11 +315,13 @@ label broaste_minigame:
         "Vreau să aflu de unde s-au pornit spiritele rele.":
             show b happy
             "Broaștelor le place răspunsul tău."
+            play sound aura_music
             $ aura +=50
             "+50 AURA"
         "Vreau să ajung acasă cât mai repede.":
             show b diss
             "Broaștele sunt nemulțumite cu răspunsul tău."
+            play sound aura_music
             $ aura -=50
             "-50 AURA"
     show b default
@@ -294,6 +329,7 @@ label broaste_minigame:
         b"Cum știm că nu ești de partea cea rea?"
         "Am fost afectată și eu de spiritele rele și vreau să restabilesc pacea.":
             show b happy
+            play sound aura_music
             "Broaștelor le place răspunsul tău."
             $ aura +=100
             "+50 AURA"
@@ -302,6 +338,7 @@ label broaste_minigame:
         "Cum îndrăzniți deodată să mă acuzați? doar nu v-am făcut nimic rău.":
             show b diss
             "Broaștele sunt nemulțumite cu răspunsul tău."
+            play sound aura_music
             $ aura -=100
             "-100 AURA"
     show b default
@@ -310,10 +347,12 @@ label broaste_minigame:
         "Sunt gata să vă ofer din aura mea pentru a vă ajuta satul. (-100 AURA)":
             show b happy
             "Broaștelor le place răspunsul tău."
+            play sound aura_music
             $ aura -=100
             "-100 AURA"
             "Totuși, prin bunătatea oferită, sporești spiritele pozitive."
             "Primești din energia lor."
+            play sound aura_music
             $ aura *=2
             "AURA ta se dublează."
         "Nu pot, cer doar să aveți încredere în mine.":
@@ -321,8 +360,11 @@ label broaste_minigame:
         "V-am spus deja tot, ar fi inteligent din partea voastră să mă credeți.":
             show b diss
             "Broaștele sunt nemulțumite cu răspunsul tău."
+            play sound aura_music
             $ aura -=200
             "-200 AURA"
+    stop audio fadeout 1.0
+    stop audio fadeout 1.5
 label broaste_aftermath:
     if aura > 100:
         jump broaste_pozitiv
@@ -354,11 +396,13 @@ label plecare_sat:
     "Continui să mergi prin pădure, cînd te întâlnești din nou cu Chiță."
     show z default at left
     show s default at right
+    play music sorik loop
     s "Bună! Să știi că următoarea ta oprire este esențială."
     s "În pădure se află un turn cu un cristal."
     s "El va determina soarta acestei lumi."
     s "Și desigur, soarta ta."
     s "Caută-l."
+    stop music fadeout 0.5
     hide s default
     "La fel de brusc cum apăruse, atât de brusc dispăruse."
     show z think at center
@@ -426,6 +470,8 @@ label mid_end:
     show b default at right
     "Nu te poți întoarce acasă, deci îți rămâne doar să te obișnuiești cu noua ta casă."
     jump sfarsit
-
+    
 label sfarsit:
     "Sfârșit."
+
+    stop music fadeout 1
