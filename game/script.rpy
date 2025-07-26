@@ -17,8 +17,8 @@ image s happy = im.Scale("soarec happy.png", 1400, 1100)
 image s default = im.Scale("soarec.png", 1400, 1100)
 image s diss = im.Scale("soarec dissapointed.png", 1400, 1100)
 define f = Character("Rumi", color="#5454") #furnica
-image f happy = im.Scale("broastedefault.png", 1400, 1100)
-image f sad = im.Scale("broastedefault.png", 1400, 1100)
+image f happy = im.Scale("Furnica (2).png", 1400, 1100)
+image f sad = im.Scale("Furnica (1).png", 1400, 1100)
 define b = Character("Familia Broscăneanu", color="#57882D") #broaste
 image b default = im.Scale("broastedefault.png", 1400, 1100)
 image b happy = im.Scale("broastehappy.png", 1400, 1100)
@@ -163,9 +163,12 @@ label ajunge_pamant:
             show z happy at center
             "Simți o energie pozitivă ce te pătrunde."
             show screen stats_screen()
+            
             $ aura +=100
             # show screen stats_screen
+            play sound aura_music
             "+100 AURA"
+            
             jump intro_soarec
 
         "Pe poteca ce iese din pădure":
