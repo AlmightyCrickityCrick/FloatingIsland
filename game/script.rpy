@@ -56,25 +56,25 @@ init python:
 
 default page_pieces = 12
 default full_page_size = (1050,500) 
-default piece_coordinates = [(781,357), (990,349), (1188,329), (1390,359), 
-                            (785,451), (929,481), (1168,464), (1337,524), 
-                            (787,611), (964,625), (1179,633), (1374,652)]
+# default piece_coordinates = [(885,357), (1090,349), (1288,329), (1490,359), 
+#                             (885,451), (1029,481), (1268,464), (1437,524), 
+#                             (887,611), (1064,625), (1279,633), (1474,652)]
 default initial_piece_coordinates = []
 
 #pt minigame
 # define giu.name_xpos = 520
 # define gui.dialogue_xpos = 520
 #aura bar
-# screen stats_screen():
-#     frame:
-#         xalign 0.05
-#         yalign 0.01
-#         vbox:
-#             text "AURA: [aura]"
-#             text "current piece: [current_piece]"
-#             text "slot piece: [slot_piece]"
-#             text "finished piece: [finished_pieces]"
-#             text "Coord: [renpy.get_mouse_pos()]"
+screen stats_screen():
+    frame:
+        xalign 0.05
+        yalign 0.01
+        vbox:
+            text "AURA: [aura]"
+            text "current piece: [current_piece]"
+            text "slot piece: [slot_piece]"
+            text "finished piece: [finished_pieces]"
+            text "Coord: [renpy.get_mouse_pos()]"
 
 
 #Chapter 1: Prolog
@@ -181,7 +181,8 @@ screen reassemble_puzzle:
 
 label pod_minigame:
     scene poiana_gol
-    $setup_puzzle()
+    show screen stats_screen()
+    $ setup_puzzle()
     call screen reassemble_puzzle
 
     return
