@@ -55,7 +55,7 @@ init python:
         return
 
 default page_pieces = 12
-default full_page_size = (764,418) 
+default full_page_size = (1920, 1080) 
 default piece_coordinates = [(578,331), (769,331), (960,331), (1151,331), 
                             (578,470), (769,470), (960,470), (1151,470), 
                             (578,609), (769,609), (960,609), (1151,609)]
@@ -148,15 +148,15 @@ screen reassemble_puzzle:
     frame:
         background "chenar.png"
         xysize full_page_size #poate aici de jucat
-        anchor(0.5,0.5)
-        pos(960,540)
+        anchor(0,0)
+        pos(578,331)
 
     draggroup:
         for i in range(page_pieces):
             drag:
                 drag_name i
                 pos initial_piece_coordinates[i]
-                anchor(0.5,0.5)
+                anchor(0,0)
                 focus_mask True
                 drag_raise True
                 image "Pieces/piesa%s.png" % (i+1)
@@ -167,7 +167,7 @@ screen reassemble_puzzle:
                 droppable True
                 dropped piece_drop
                 pos piece_coordinates[i]
-                anchor(0.5,0.5)
+                anchor(0,0)
                 focus_mask True
                 image "Pieces/piesa%s.png" % (i+1) alpha 0.5
 
