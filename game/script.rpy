@@ -4,12 +4,16 @@ image z default = im.Scale("zana.png", 1400, 1100)
 image z happy = im.Scale("zana happy.png", 1400, 1100)
 image z think = im.Scale("zana ganditoare.png", 1400, 1100)
 image z scared = im.Scale("zana scared.png", 1400, 1100)
-define s = Character("soarec", color="#805D49") #soarec
+define s = Character("Chiță", color="#805D49") #soarec
 image s happy = im.Scale("soarec happy.png", 1400, 1100)
 image s default = im.Scale("soarec.png", 1400, 1100)
 image s diss = im.Scale("soarec dissapointed.png", 1400, 1100)
-define f = Character("furnica", color="#5454") #furnica
-define b = Character("broaste", color="#57882D") #broaste
+define f = Character("Rumi", color="#5454") #furnica
+define b = Character("Familia Broscăneanu", color="#57882D") #broaste
+image b default = im.Scale("broastedefault.png", 1400, 1100)
+image b happy = im.Scale("broastehappy.png", 1400, 1100)
+image b diss = im.Scale("broastedissapointed.png", 1400, 1100)
+
 default aura = 0
 default char_ypos=0.1
 
@@ -30,6 +34,14 @@ image black_image = im.Scale("black_image.png", 1920, 1080)
 transform center:
     ypos 0.1
     xpos 0.15
+
+transform left:
+    ypos 0.1
+    xpos -0.1
+
+transform right:
+    ypos 0.1
+    xpos 0.4
 
 default finished_pieces = 0
 #python code
@@ -126,14 +138,15 @@ label ajunge_pamant:
             scene poiana_aura
             show z happy at center
             "Simți o energie pozitivă ce te pătrunde."
+            show screen stats_screen()
             $ aura +=100
             # show screen stats_screen
             "+100 AURA"
-            jump poiana_start
+            jump broaste_minigame
 
         "Pe poteca ce iese din pădure":
             "Începi să mergi pe drumul ce trece prin pădure."
-            jump pod_minigame
+            jump broaste_minigame
             
 #Chapter 2: Exploreaza
 label intro_soarec:
@@ -147,9 +160,9 @@ screen reassemble_puzzle:
     #image "poiana_pod"
     frame:
         background "chenar.png"
-        xysize full_page_size #poate aici de jucat
+        xysize full_page_size 
         anchor(0.5,0.5)
-        pos(960,540)
+        pos(1300,515)
 
     draggroup:
         for i in range(page_pieces):
@@ -181,4 +194,71 @@ label pod_minigame:
 
 label reassemble_complete:
     "ai completat puzzle"
+
+label broaste_minigame:
+    show b default at right
+    show z default at left
+    menu:
+        b"Cine ești?"
+        "Mă numesc [name]. Am venit să vă ajut.":
+            show b happy
+            "Broaștelor le place răspunsul tău."
+            $ aura +=50
+            "+50 AURA"
+        "Nu cred că e important pentru conversația noastră":
+            show b diss
+            "Broaștele sunt nemulțumite cu răspunsul tău."
+            $ aura -=50
+            "-50 AURA"
+        "[name], o zână.":
+            "Broaștele nu par convinse de răspunsul tău."
+    show b default
+    menu:
+        b"Ce plănuiești să faci aici?"
+        "Nu știu, sunt pierdută.":
+            "Broaștele nu par convinse de răspunsul tău."
+        "Vreau să aflu de unde s-au pornit spiritele rele.":
+            show b happy
+            "Broaștelor le place răspunsul tău."
+            $ aura +=50
+            "+50 AURA"
+        "Vreau să ajung acasă cât mai repede.":
+            show b diss
+            "Broaștele sunt nemulțumite cu răspunsul tău."
+            $ aura -=50
+            "-50 AURA"
+    show b default
+    menu:
+        b"Cum știm că nu ești de partea cea rea?"
+        "Am fost afectată și eu de spiritele rele și vreau să restabilesc pacea.":
+            show b happy
+            "Broaștelor le place răspunsul tău."
+            $ aura +=50
+            "+50 AURA"
+        "Nu știu cum să vă demonstrez.":
+            "Broaștele nu par convinse de răspunsul tău."
+        "Cum îndrăzniți deodată să mă acuzați? doar nu v-am făcut nimic rău.":
+            show b diss
+            "Broaștele sunt nemulțumite cu răspunsul tău."
+            $ aura -=50
+            "-50 AURA"
+    show b default
+    menu:
+        b"Demonstrează că ești de partea noastră."
+        "Sunt gata să vă ofer din aura mea pentru a vă ajuta satul. (-100 AURA)":
+            show b happy
+            "Broaștelor le place răspunsul tău."
+            $ aura -=100
+            "-100 AURA"
+            "Totuși, prin bunătatea oferită, sporești spiritele pozitive."
+            "Primești din energia lor."
+            $ aura *=2
+            "AURA ta se dublează."
+        "Nu pot, cer doar să aveți încredere în mine.":
+            "Broaștele nu par convinse de răspunsul tău."
+        "V-am spus deja tot, ar fi inteligent din partea voastră să mă credeți.":
+            show b diss
+            "Broaștele sunt nemulțumite cu răspunsul tău."
+            $ aura -=50
+            "-50 AURA"
 
