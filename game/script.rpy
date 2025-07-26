@@ -74,7 +74,6 @@ label start:
     jump ajunge_pamant
 
     
-    
    
 label ajunge_pamant:
     # Freya este pe pamant si incepe putin sa exploreze zona.
